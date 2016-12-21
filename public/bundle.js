@@ -26147,43 +26147,17 @@
 
 	console.log('Starting redux example');
 
-	// Pure function
-	function add(a, b) {
-	    return a + b;
-	}
+	var reducer = function reducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: 'Anonymous' };
+	    var action = arguments[1];
 
-	var a = 3;
-	function add(b) {
-	    return a + b;
-	}
-
-	var result;
-	function add(a, b) {
-	    result = a + b;
-	    return result;
-	}
-
-	function add(a, b) {
-	    return a + b + new Date().getSeconds();
-	}
-
-	function changeProp(obj) {
-	    // return {
-	    //     ...obj,
-	    //     name: 'Jen'
-	    // }
-	    obj.name = 'Jen';
-	    return obj;
-	}
-	var startingValue = {
-	    name: 'Chris',
-	    age: 20
+	    return state;
 	};
+	var store = redux.createStore(reducer);
 
-	var res = changeProp(startingValue);
-	console.log(startingValue);
-
-	console.log(res);
+	var currentState = store.getState();
+	// console.log('currentState', currentState);
+	__webpack_require__(255);
 
 /***/ },
 /* 234 */
@@ -27253,6 +27227,34 @@
 	    }, last.apply(undefined, arguments));
 	  };
 	}
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var redux = __webpack_require__(234);
+
+	console.log('Starting todo redux example');
+
+	var stateDefault = {
+	    searchText: '',
+	    showCompleted: false,
+	    todos: []
+	};
+
+	var reducer = function reducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : stateDefault;
+	    var action = arguments[1];
+
+	    return state;
+	};
+
+	var store = redux.createStore(reducer);
+
+	var currentState = store.getState();
+	console.log('currentState', currentState);
 
 /***/ }
 /******/ ]);
