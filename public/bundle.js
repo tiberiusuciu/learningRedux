@@ -26184,6 +26184,18 @@
 	                    genre: action.genre
 	                }])
 	            });
+	        case 'REMOVE_HOBBY':
+	            return _extends({}, state, {
+	                hobbies: state.hobbies.filter(function (hobby) {
+	                    return hobby.id !== action.id;
+	                })
+	            });
+	        case 'REMOVE_MOVIE':
+	            return _extends({}, state, {
+	                movies: state.movies.filter(function (movie) {
+	                    return movie.id !== action.id;
+	                })
+	            });
 	        default:
 	            return state;
 	    }
@@ -26216,6 +26228,16 @@
 	});
 
 	store.dispatch({
+	    type: 'ADD_HOBBY',
+	    hobby: 'Walking'
+	});
+
+	store.dispatch({
+	    type: 'REMOVE_HOBBY',
+	    id: 2
+	});
+
+	store.dispatch({
 	    type: 'CHANGE_NAME',
 	    name: 'Dominique'
 	});
@@ -26236,6 +26258,11 @@
 	    type: 'ADD_MOVIE',
 	    title: 'Star Wars',
 	    genre: 'sci-fi'
+	});
+
+	store.dispatch({
+	    type: 'REMOVE_MOVIE',
+	    id: 1
 	});
 
 /***/ },
