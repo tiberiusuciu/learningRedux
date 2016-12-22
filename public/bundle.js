@@ -117,7 +117,8 @@
 	    'BoilerPlate 3 project'
 	), document.getElementById('app'));
 
-	__webpack_require__(233);
+	// require('./redux-example.jsx');
+	__webpack_require__(255);
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ },
@@ -26138,28 +26139,7 @@
 
 
 /***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var redux = __webpack_require__(234);
-
-	console.log('Starting redux example');
-
-	var reducer = function reducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: 'Anonymous' };
-	    var action = arguments[1];
-
-	    return state;
-	};
-	var store = redux.createStore(reducer);
-
-	var currentState = store.getState();
-	// console.log('currentState', currentState);
-	__webpack_require__(255);
-
-/***/ },
+/* 233 */,
 /* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27234,6 +27214,8 @@
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var redux = __webpack_require__(234);
 
 	console.log('Starting todo redux example');
@@ -27243,18 +27225,29 @@
 	    showCompleted: false,
 	    todos: []
 	};
-
 	var reducer = function reducer() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : stateDefault;
 	    var action = arguments[1];
 
-	    return state;
+	    switch (action.type) {
+	        case 'CHANGE_SEARCH_TEXT':
+	            state = _extends({}, state, {
+	                searchText: action.searchText
+	            });
+	        default:
+	            return state;
+	    }
 	};
-
 	var store = redux.createStore(reducer);
 
 	var currentState = store.getState();
 	console.log('currentState', currentState);
+
+	store.dispatch({
+	    type: 'CHANGE_SEARCH_TEXT',
+	    searchText: 'dog'
+	});
+	console.log('searchText should be "dog" ', store.getState());
 
 /***/ }
 /******/ ]);
