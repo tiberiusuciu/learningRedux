@@ -26143,163 +26143,12 @@
 
 	'use strict';
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 	var redux = __webpack_require__(234);
-	var axios = __webpack_require__(256);
 
 	console.log('Starting redux example');
 
-	// Name reducer and action generators
-	// ---------------------
-	var nameReducer = function nameReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Anonymous';
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case 'CHANGE_NAME':
-	            return action.name;
-	        default:
-	            return state;
-	    }
-	};
-
-	var changeName = function changeName(name) {
-	    return {
-	        type: 'CHANGE_NAME',
-	        name: name
-	    };
-	};
-
-	// Hobbies reducer and action generators
-	// ---------------------
-	var nextHobbyId = 1;
-	var hobbiesReducer = function hobbiesReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case 'ADD_HOBBY':
-	            return [].concat(_toConsumableArray(state), [{
-	                id: nextHobbyId++,
-	                hobby: action.hobby
-	            }]);
-	        case 'REMOVE_HOBBY':
-	            return state.filter(function (hobby) {
-	                return hobby.id !== action.id;
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var addHobby = function addHobby(hobby) {
-	    return {
-	        type: 'ADD_HOBBY',
-	        hobby: hobby
-	    };
-	};
-
-	var removeHobby = function removeHobby(id) {
-	    return {
-	        type: 'REMOVE_HOBBY',
-	        id: id
-	    };
-	};
-
-	// Movies reducer and action generators
-	// ---------------------
-	var nextMovieId = 1;
-	var moviesReducer = function moviesReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case 'ADD_MOVIE':
-	            return [].concat(_toConsumableArray(state), [{
-	                id: nextMovieId++,
-	                title: action.title,
-	                genre: action.genre
-	            }]);
-	        case 'REMOVE_MOVIE':
-	            return state.filter(function (movie) {
-	                return movie.id !== action.id;
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var addMovie = function addMovie(title, genre) {
-	    return {
-	        type: 'ADD_MOVIE',
-	        title: title,
-	        genre: genre
-	    };
-	};
-
-	var removeMovie = function removeMovie(id) {
-	    return {
-	        type: 'REMOVE_MOVIE',
-	        id: id
-	    };
-	};
-
-	// MapReducer reducer and action generators
-	// ---------------------
-	var mapReducer = function mapReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { isFetching: false, url: undefined };
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case 'START_LOCATION_FETCH':
-	            return {
-	                isFetching: true,
-	                url: undefined
-	            };
-	        case 'COMPLETE_LOCATION_FETCH':
-	            return {
-	                isFetching: false,
-	                url: action.url
-	            };
-	        default:
-	            return state;
-	    }
-	};
-
-	var startLocationFetch = function startLocationFetch() {
-	    return {
-	        type: 'START_LOCATION_FETCH'
-	    };
-	};
-
-	var completeLocationFetch = function completeLocationFetch(url) {
-	    return {
-	        type: 'COMPLETE_LOCATION_FETCH',
-	        url: url
-	    };
-	};
-
-	var fetchLocation = function fetchLocation() {
-	    store.dispatch(startLocationFetch());
-
-	    axios.get('http://ipinfo.io').then(function (res) {
-	        var loc = res.data.loc;
-	        var baseUrl = 'http://maps.google.com?q=';
-	        store.dispatch(completeLocationFetch(baseUrl + loc));
-	    });
-	};
-
-	var reducer = redux.combineReducers({
-	    name: nameReducer,
-	    hobbies: hobbiesReducer,
-	    movies: moviesReducer,
-	    map: mapReducer
-	});
-
-	var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
-	    return f;
-	}));
+	var actions = __webpack_require__(281);
+	var store = __webpack_require__(282).configure();
 
 	// Subscribe to changes
 	var unsubscribe = store.subscribe(function () {
@@ -26318,20 +26167,20 @@
 	var currentState = store.getState();
 	console.log('currentState', currentState);
 
-	fetchLocation();
+	store.dispatch(actions.fetchLocation());
 
-	store.dispatch(changeName('Chris'));
+	store.dispatch(actions.changeName('Chris'));
 
-	store.dispatch(addHobby('Running'));
-	store.dispatch(addHobby('Walking'));
-	store.dispatch(removeHobby(2));
+	store.dispatch(actions.addHobby('Running'));
+	store.dispatch(actions.addHobby('Walking'));
+	store.dispatch(actions.removeHobby(2));
 
-	store.dispatch(changeName('Dominique'));
+	store.dispatch(actions.changeName('Dominique'));
 
-	store.dispatch(addMovie('Pulp Fiction', 'Edgy'));
-	store.dispatch(addMovie('Fight Club', 'Edgy'));
-	store.dispatch(addMovie('Star Wars', 'Sci-Fi'));
-	store.dispatch(removeMovie(1));
+	store.dispatch(actions.addMovie('Pulp Fiction', 'Edgy'));
+	store.dispatch(actions.addMovie('Fight Club', 'Edgy'));
+	store.dispatch(actions.addMovie('Star Wars', 'Sci-Fi'));
+	store.dispatch(actions.removeMovie(1));
 
 /***/ },
 /* 234 */
@@ -28828,6 +28677,219 @@
 	    return callback.apply(null, arr);
 	  };
 	};
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var axios = __webpack_require__(256);
+
+	var changeName = exports.changeName = function changeName(name) {
+	    return {
+	        type: 'CHANGE_NAME',
+	        name: name
+	    };
+	};
+
+	var addHobby = exports.addHobby = function addHobby(hobby) {
+	    return {
+	        type: 'ADD_HOBBY',
+	        hobby: hobby
+	    };
+	};
+
+	var removeHobby = exports.removeHobby = function removeHobby(id) {
+	    return {
+	        type: 'REMOVE_HOBBY',
+	        id: id
+	    };
+	};
+
+	var addMovie = exports.addMovie = function addMovie(title, genre) {
+	    return {
+	        type: 'ADD_MOVIE',
+	        title: title,
+	        genre: genre
+	    };
+	};
+
+	var removeMovie = exports.removeMovie = function removeMovie(id) {
+	    return {
+	        type: 'REMOVE_MOVIE',
+	        id: id
+	    };
+	};
+
+	var startLocationFetch = exports.startLocationFetch = function startLocationFetch() {
+	    return {
+	        type: 'START_LOCATION_FETCH'
+	    };
+	};
+
+	var completeLocationFetch = exports.completeLocationFetch = function completeLocationFetch(url) {
+	    return {
+	        type: 'COMPLETE_LOCATION_FETCH',
+	        url: url
+	    };
+	};
+
+	var fetchLocation = exports.fetchLocation = function fetchLocation() {
+	    return function (dispatch, getState) {
+	        dispatch(startLocationFetch());
+
+	        axios.get('http://ipinfo.io').then(function (res) {
+	            var loc = res.data.loc;
+	            var baseUrl = 'http://maps.google.com?q=';
+	            dispatch(completeLocationFetch(baseUrl + loc));
+	        });
+	    };
+	};
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var redux = __webpack_require__(234);
+	var thunk = __webpack_require__(284).default;
+
+	var _require = __webpack_require__(283),
+	    nameReducer = _require.nameReducer,
+	    hobbiesReducer = _require.hobbiesReducer,
+	    moviesReducer = _require.moviesReducer,
+	    mapReducer = _require.mapReducer;
+
+	var configure = exports.configure = function configure() {
+	    var reducer = redux.combineReducers({
+	        name: nameReducer,
+	        hobbies: hobbiesReducer,
+	        movies: moviesReducer,
+	        map: mapReducer
+	    });
+
+	    var store = redux.createStore(reducer, redux.compose(redux.applyMiddleware(thunk), window.devToolsExtension ? window.devToolsExtension() : function (f) {
+	        return f;
+	    }));
+
+	    return store;
+	};
+
+/***/ },
+/* 283 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var nameReducer = exports.nameReducer = function nameReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Anonymous';
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'CHANGE_NAME':
+	            return action.name;
+	        default:
+	            return state;
+	    }
+	};
+
+	var nextHobbyId = 1;
+	var hobbiesReducer = exports.hobbiesReducer = function hobbiesReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'ADD_HOBBY':
+	            return [].concat(_toConsumableArray(state), [{
+	                id: nextHobbyId++,
+	                hobby: action.hobby
+	            }]);
+	        case 'REMOVE_HOBBY':
+	            return state.filter(function (hobby) {
+	                return hobby.id !== action.id;
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var nextMovieId = 1;
+	var moviesReducer = exports.moviesReducer = function moviesReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'ADD_MOVIE':
+	            return [].concat(_toConsumableArray(state), [{
+	                id: nextMovieId++,
+	                title: action.title,
+	                genre: action.genre
+	            }]);
+	        case 'REMOVE_MOVIE':
+	            return state.filter(function (movie) {
+	                return movie.id !== action.id;
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var mapReducer = exports.mapReducer = function mapReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { isFetching: false, url: undefined };
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'START_LOCATION_FETCH':
+	            return {
+	                isFetching: true,
+	                url: undefined
+	            };
+	        case 'COMPLETE_LOCATION_FETCH':
+	            return {
+	                isFetching: false,
+	                url: action.url
+	            };
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 284 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = thunkMiddleware;
+	function thunkMiddleware(_ref) {
+	  var dispatch = _ref.dispatch;
+	  var getState = _ref.getState;
+
+	  return function (next) {
+	    return function (action) {
+	      if (typeof action === 'function') {
+	        return action(dispatch, getState);
+	      }
+
+	      return next(action);
+	    };
+	  };
+	}
 
 /***/ }
 /******/ ]);
