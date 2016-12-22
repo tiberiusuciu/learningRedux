@@ -111,11 +111,10 @@
 	// App css
 	__webpack_require__(229);
 
-	ReactDOM.render(React.createElement(
-	    'p',
-	    null,
-	    'BoilerPlate 3 project'
-	), document.getElementById('app'));
+	// ReactDOM.render(
+	//     <p>BoilerPlate 3 project</p>,
+	//     document.getElementById('app')
+	// );
 
 	// require('./redux-example.jsx');
 	__webpack_require__(255);
@@ -27238,7 +27237,18 @@
 	            return state;
 	    }
 	};
-	var store = redux.createStore(reducer);
+	var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
+	    return f;
+	}));
+
+	// Subscribe to changes
+	var unsubscribe = store.subscribe(function () {
+	    var state = store.getState();
+
+	    console.log('searchText is', state.name);
+	    document.getElementById('app').innerHTML = state.searchText;
+	});
+	// unsubscribe();
 
 	var currentState = store.getState();
 	console.log('currentState', currentState);
@@ -27246,6 +27256,14 @@
 	store.dispatch({
 	    type: 'CHANGE_SEARCH_TEXT',
 	    searchText: 'dog'
+	});
+	store.dispatch({
+	    type: 'CHANGE_SEARCH_TEXT',
+	    searchText: 'walk'
+	});
+	store.dispatch({
+	    type: 'CHANGE_SEARCH_TEXT',
+	    searchText: 'work'
 	});
 	console.log('searchText should be "dog" ', store.getState());
 
